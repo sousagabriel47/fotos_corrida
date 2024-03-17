@@ -1,9 +1,8 @@
 import requests
 import os
-import zipfile
-import shutil
+import tarfile
 
-
+# Configurar o numero do peito e nome
 lista_nomes = {#'3913' : 'JEANDRO ALMEIDA',
 # '3809' : 'ERINALDO SOARES DOS SANTOS',
 # '3914' : 'CESAR HENRIQUE NUNES',
@@ -38,6 +37,7 @@ id_corrida = 85467
 if not os.path.exists(os.path.join('fotos')):
   os.mkdir(os.path.join('fotos'))
 
+
 for id, nome in lista_nomes.items():
   print(f'Buscando {nome}')
   response = requests.get(f'https://fotop.com.br/fotos/eventos/busca/id/{id}/evento/{id_corrida}/busca/numero')
@@ -56,13 +56,14 @@ for id, nome in lista_nomes.items():
   if not os.path.exists(os.path.join('fotos', f'{id}_{nome.split()[0]}')):
     os.mkdir(os.path.join('fotos', f'{id}_{nome.split()[0]}'))
 
-  for id_foto, foto in enumerate(lista_fotos, 1):
+  folder_name = os.path.join('fotos', f'{id}_{nome.split()[0]}')
+
+  for id_foto, foto in enumerate(lista_fotos[:10], 1):
       req = requests.get(foto)
       with open(os.path.join('fotos',
                              f'{id}_{nome.split()[0]}',
                              str(id_foto)+'.jpeg'),'wb') as file:
           file.write(req.content)
-
-  shutil.make_archive(os.path.join('fotos', f'{id}_{nome.split()[0]}'), 
-                      'zip', 
-                      os.path.join('fotos', f'{id}_{nome.split()[0]}'))
+  with tarfile.open(folder_name + ".tgz", "w:gz" ) as tar:
+      for name in os.listdir(folder_name):
+          tar.add(os.path.join(folder_name, name))
