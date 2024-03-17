@@ -58,7 +58,7 @@ for id, nome in lista_nomes.items():
 
   folder_name = os.path.join('fotos', f'{id}_{nome.split()[0]}')
 
-  for id_foto, foto in enumerate(lista_fotos[:10], 1):
+  for id_foto, foto in enumerate(lista_fotos, 1):
       req = requests.get(foto)
       with open(os.path.join('fotos',
                              f'{id}_{nome.split()[0]}',
