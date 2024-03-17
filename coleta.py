@@ -30,12 +30,17 @@ lista_nomes = {#'3913' : 'JEANDRO ALMEIDA',
 # '620' : 'SOLANGE MOREIRA DE CARVALHO'
 }
 
+
+# inserir o ID da corrida
+# https://fotop.com.br/fotos/eventos?evento=85467
+id_corrida = 85467
+
 if not os.path.exists(os.path.join('fotos')):
   os.mkdir(os.path.join('fotos'))
 
 for id, nome in lista_nomes.items():
   print(f'Buscando {nome}')
-  response = requests.get(f'https://fotop.com.br/fotos/eventos/busca/id/{id}/evento/85467/busca/numero')
+  response = requests.get(f'https://fotop.com.br/fotos/eventos/busca/id/{id}/evento/{id_corrida}/busca/numero')
 
   lista_fotos = []
 
@@ -51,7 +56,7 @@ for id, nome in lista_nomes.items():
   if not os.path.exists(os.path.join('fotos', f'{id}_{nome.split()[0]}')):
     os.mkdir(os.path.join('fotos', f'{id}_{nome.split()[0]}'))
 
-  for id_foto, foto in enumerate(lista_fotos[:2], 1):
+  for id_foto, foto in enumerate(lista_fotos, 1):
       req = requests.get(foto)
       with open(os.path.join('fotos',
                              f'{id}_{nome.split()[0]}',
